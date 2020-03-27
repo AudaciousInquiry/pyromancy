@@ -26,3 +26,15 @@ Prerequisites to use of it are:
 Eventually we will get around to providing some documentation. It's
 not the way we'd prefer to do things, but it might just help others
 set a fire under their own FHIR projects.
+
+The project is pretty empty to start with.  The magic happens through
+the spell components in [a single 300 line XML File](https://github.com/AudaciousInquiry/pyromancy/blob/master/fshx/ig-data/input/SANER.xml), and a few XSLT files.
+
+## To invoke the Magic of Pyromancy
+Chant BUILD.BAT at when prompted by the shell demon. The XML file
+is transformed to various outputs through the efforts of various
+magical components.  Some of these outputs are then planted,
+and bloom into wondrous imagery.
+A FSH file is sacraficed to become Sushi, and this is laid 
+before the FHIR demon. Once summoned, the FHIR demon will do its 
+work, producing 15 pages of IG, from a mere 300 lines of XML.

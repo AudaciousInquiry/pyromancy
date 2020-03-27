@@ -1,0 +1,300 @@
+<profile xmlns="http://ainq.com/ig-definition" id="SANER" chapter='1' codingsystems="SanerBedType" valuesets="BedLocationOperationalStatus BedProperty BedType">
+	<domain id="AI">
+	    <org>Audaciuo
+	     s Inquiry</org>
+	    <name>Situational Awareness for Novel Epidemic Response</name>
+	    <description></description>
+	    <overview file="SANER-overview.md"/>
+	</domain>
+    <name>Situational Awareness for Novel Epidemic Response</name>
+    <description>The Situational Awareness for Novel Epidemic Response Implementation Guide enables transmission
+of high level situational awareness information from inpatient facilities to centralized data repositories
+to support the treatment of novel influenza-like illness.
+    </description>
+    <!-- overview is optional -->
+    <overview file="SANER-overview.md"/>
+    <!-- option is optional and repeatable -->
+    <option id="Push">
+	    <name>Push Option</name>
+	    <description>An actor implementing the Push Option supports the periodic push of a Bundle of records
+describing the current status of health delivery resources to a centralized collection point.
+	    </description>
+	    <overview/>
+	    <participant actor='AvailabilitySource'>
+	       <description>An Availability Source implementing the Push Option periodically sends updates to the
+Availability Collector using the [Update Availability](transaction-2.html) transaction.
+</description>
+	    </participant>
+    </option>
+    <option id="Pull">
+        <name>Pull Option</name>
+        <description>An actor implementing the Pull Option supports use of the [Query Availability] transaction made from
+an Availability Collector to enable reporting of the current status of selected health delivery resources .</description>
+        <overview/>
+        <participant actor='AvailabilitySource'>
+           <description>An Availability Source implementing the Pull Option periodically is periodically queried by an
+Availability Collector using the [Query Availability](transaction-1.html) transaction to enable collection of the current status.
+</description>
+        </participant>
+    </option>
+    <option id="Resource">
+        <name>Resource Option</name>
+        <description>An actor supporting the Resource Option can describe the status of non-bed treatment
+resources, such as ventilators, respirators, infusion pumps, monitoring equipment, et cetera</description>
+        <overview/>
+        <participant actor='AvailabilitySource'>
+            <description>An Availability Source implementing the Resource Option can send updates on other Resources
+(e.g., ventilators, respirators, other medical equipment).</description>
+        </participant>
+        <participant actor='AvailabilityCollector'>
+            <description>An Availability Collector implementing the Resource Option can request updates on other Resources
+(e.g., ventilators, respirators, other medical equipment), or aggregate data updates provided about these
+resources.</description>
+        </participant>
+        <participant actor='AvailabilityReporter'>
+            <description>An Availability Reporter implementing the Resource Option can reports data about other Resources
+(e.g., ventilators, respirators, other medical equipment).</description>
+        </participant>
+    </option>
+    <!-- standard is repeatable -->
+    <standard id="FHIR-R4">
+        <name>HL7 FHIR Release 4.0</name>
+        <url>http://www.hl7.org/FHIR/R4</url>
+    </standard>
+    <standard id="RFC-7230">
+        <url>https://ietf.org/rfc/rfc7230.html</url>
+        <name>Hypertext Transfer Protocol - HTTP/1.1</name>
+    </standard>
+    <standard id="RFC-7540">
+        <url>https://ietf.org/rfc/rfc7540.html</url>
+        <name>Hypertext Transfer Protocol - HTTP/2</name>
+    </standard>
+    <standard id="RFC-3986">
+        <url>https://ietf.org/rfc/rfc3986.html</url>
+        <name>Uniform Resource Identifier (URI): Generic Syntax</name>
+    </standard>
+    <standard id="RFC-4627">
+        <url>https://ietf.org/rfc/rfc4627.html</url>
+        <name>The application/json Media Type for JavaScript Object Notation (JSON)</name>
+    </standard>
+    <standard id="RFC-6585">
+        <url>https://ietf.org/rfc/rfc6585.html</url>
+        <name>Additional HTTP Status Codes</name>
+    </standard>
+
+    <!-- usecase is optional and repeatable -->
+    <usecase id="BED" actors="AvailabilitySource AvailabilityCollector" transactions="PULL-TX PUSH-TX" content="bed-group bed-location">
+	    <name>Collecting Bed Availability</name>
+        <description>This use case addresses the exchange of data from Facilities to a Centralized
+reporting system for Public Health</description>
+	    <!-- overview is optional -->
+	    <overview>Overview TBD</overview>
+	    <step id="BED-STEP1" from="AvailabilityCollector" to="AvailabilitySource" returns="now">
+            <name>Availability Collector Initiates Search</name>
+            <description>The Availability Collector identifies features associated with a group of
+bed resources that it wishes to collect data about.  For example, the Availability Collector can
+request information about ICU, med/surg, or ED beds available or in use.</description>
+            <overview>TBD</overview>
+	        <return id="BED-STEP2" from="AvailabilitySource" to="AvailabilityCollector" returns="now">
+	            <name>Availability Source Reports Aggregate Data</name>
+	            <description>The Availability Source reports aggregate data about a group of beds based
+	                on specified bed characteristics</description>
+	            <overview>TBD</overview>
+	        </return>
+	    </step>
+    </usecase>
+    <usecase id="Reporting" actors="AvailabilityCollector AvailabilityReporter" transactions="REPORT-TX" content="bed-group bed-location">
+        <name>Reporting on Bed Availability</name>
+        <description>TBD</description>
+        <!-- overview is optional -->
+        <overview>TBD</overview>
+        <step id="Reporting-STEP1" from="Public Health User" to="AvailabilityReporter" returns="now">
+            <name>User Initiates Search</name>
+            <description>The Public Health User navigates to a web page where collected data is reported.</description>
+            <overview>TBD</overview>
+            <step id="Aggregating-STEP2" from="AvailabilityReporter" to="AvailabilityCollector" returns="now">
+                <name>Availability Reporter gathers data from Availability Collectors</name>
+                <description>The Availability Reporter gathers and aggregates data from one or more Availability Collectors.</description>
+                <overview>The means by which gathering and aggregation is performed is not further specified
+by this implementation guide. However, the Availability Reporter can obtain data from an Availability Collector by using other transactions
+within this profile if desired.</overview>
+            </step>
+            <return>
+                <name>Display Results</name>
+                <description>The Availability Reporter displays an overview of aggregated regional results to the
+user, and additional links which enable navigation to finer grained or alternative displays.</description>
+                <overview>Data can be displayed as aggregated or fine-grained status information based
+on the current focus of the public health user.  It may be shown as a map, a table, or a graph.</overview>
+            </return>
+        </step>
+        <step id="Reporting-STEP2" from="Public Health User" to="AvailabilityReporter" returns="now">
+            <name>User refines Focus or Form of Display</name>
+            <description>The Public Health User selects a new form of display (e.g., Map, table or graph) or refines their
+focus (e.g., wider or smaller region).</description>
+            <overview>TBD</overview>
+            <return>
+                <name>Display Refined Results</name>
+                <description>The Availability Collector modifies the users focus and reporting format</description>
+                <overview>TBD</overview>
+            </return>
+        </step>
+    </usecase>
+    <!--  Other Use Cases can describe options -->
+    <actor id="AvailabilitySource">
+        <name>Availability Source</name>
+        <description>The Availability Source Actor reports results for a single facility, collection of facilities
+        or aggragated data for a region</description>
+        <!-- overview is optional -->
+        <overview>TBD</overview>
+        <supports-tx transaction="PULL-TX" as="server">
+            <role>Responds to a query, reporting on selected data.</role>
+            <on-condition>
+                <description>When the Availability Source supports the Pull Option</description>
+            </on-condition>
+        </supports-tx>
+        <supports-tx transaction="PUSH-TX" as="client">
+            <role>Periodically pushes selected data to an Availability Collector.</role>
+            <on-condition>
+                <description>When the Availability Source supports the Push Option</description>
+            </on-condition>
+        </supports-tx>
+        <!-- requirement is optional and can repeat -->
+        <requires id="COLLECT-R1">
+            <description>An Availability Source **shall** implement at least one of the following options:
+* Push Option
+* Pull Option
+            </description>
+            <overview>
+</overview>
+        </requires>
+    </actor>
+    <actor id="AvailabilityCollector">
+        <name>Availability Collector</name>
+        <description>The Availability Collector gathers data on resource availablity from other systems</description>
+        <requires-tx transaction="PULL-TX" as="client">
+            <role>Collects availability data on a periodic basis</role>
+        </requires-tx>
+        <requires-tx transaction="PUSH-TX" as="server">
+            <role>Receives availability data on a periodic basis</role>
+        </requires-tx>
+    </actor>
+
+    <actor id="AvailabilityReporter">
+        <name>Availability Reporter</name>
+        <description>The Availability Reporter allows users to view reports on aggregated and fine-grained
+data gathered from multiple Availability Sources.
+        </description>
+        <requires-tx transaction="REPORT-TX" as="self">
+            <role>Display reports using availability data</role>
+        </requires-tx>
+    </actor>
+
+    <transaction id="PULL-TX" standards="FHIR-R4 RFC-7230">
+        <name>Query Availability</name>
+        <description>The Query Availability transaction allows an Availability Collector to
+periodically query about the availability of a resource from an Availability Source.</description>
+        <!-- like steps, messages can nest to support activation lines -->
+        <message from="AvailabilityCollector" to="AvailabilitySource">
+            <name>Search Group Request</name>
+            <description></description>
+            <trigger id="TRIGGER1">
+                <name>Periodic Reporting Interval Elapsed</name>
+            </trigger>
+            <semantics>
+                <description>The Availability sends a query using an HTTP GET or POST transaction
+to the Group endpoint of the Availability Source requesting information on available resources.</description>
+                <overview>The GET Query uses the FHIR [Search](https://hl7.org/fhir/R4/search.html) syntax to
+query for information about one or more groups. The query parameters ...</overview>
+            </semantics>
+            <action by="AvailabilityCollector">
+                <name>An Availability Collector sends a Query to the Availability Source</name>
+                <description>The Availability Collector sends a query.</description>
+                <overview></overview>
+            </action>
+            <result>
+                <name>Search Group Response</name>
+                <description>This transaction enables query on the availability of resources.</description>
+                <trigger id="TRIGGER-1a">
+                   <name>A query of Group resources has been requested.</name>
+                </trigger>
+                <semantics>
+                    <description>The Availability Source responds with a Bundle of Groups matching the query parameters.</description>
+                    <overview>The groups in the resource will conform to the profiles for the
+Bed Availability Group or Device Availability Group described eslewhere in this Implementation Guide</overview>
+                </semantics>
+                <action by="AvailabilitySource">
+                    <name>Availability Source responds with Bundle</name>
+                    <description>The Availability Source will generate a Bundle of matching Group resources and return it with a 200 OK response.</description>
+                    <overview>If there are no matching resources, the Availability Source responds with an empty bundle and a 200 OK response.
+If errors occur during retrieval, the Availability Source makes a best effort to return what it can and may include an OperationOutcome resource
+in the response indicating more details about what might be missing.  If the retrieval cannot be performed, the Availability Source may return
+a 4XX error or 5XX error to indicate that an error has occured.
+                    </overview>
+                </action>
+            </result>
+        </message>
+    </transaction>
+
+    <transaction id="PUSH-TX" standards="FHIR-R4 RFC-7230">
+        <name>Update Availability</name>
+        <description>The Update Availability transaction allows an Availability Source to
+periodically update the availability of resources to an Availability Collector.</description>
+        <message from="AvailabilitySource" to="AvailabilityCollector">
+            <name>Push Availability Bundle</name>
+            <description></description>
+            <trigger id="TRIGGER2">
+                <name>Periodic Reporting Interval elapsed</name>
+                <description>brief description (markdown)</description>
+                <overview>more detailed description (markdown)</overview>
+            </trigger>
+            <action by="AvailabilitySource">
+                <name>Availability Source reports a Bundle</name>
+                <description>The Availability Source posts a Bundle of matching Group resources to the Availability Collector.</description>
+                <overview>If there are no matching resources, the Availability Source reports with an empty bundle. If errors occur during
+producing the report, the Availability Source makes a best effort to send what it
+can and may include an OperationOutcome resource in the bundle indicating more
+details about what might be missing.
+                </overview>
+            </action>
+            <action by="AvailabilityCollector">
+                <name>The Availability Collector responds with Success</name>
+                <description>The Availability Collector reports success using 200 OK, 201 Created, or 204 No Content to indicate a successful update.</description>
+                <overview>If an error occured during the update, the Availability collector should report it using a 4XX or 5XX error depending on the cause.</overview>
+            </action>
+        </message>
+    </transaction>
+    <transaction id="REPORT-TX" standards="RFC-7230">
+        <name>Report Results</name>
+        <description>The Report Results transaction allows users (e.g., Public Health Officials) to view current resource availability.</description>
+        <message from="AvailabilityReporter" to="AvailabilityReporter">
+            <name>Report Availability</name>
+            <description></description>
+        </message>
+    </transaction>
+    <content id="bed-group">
+        <name>Bed Availability Group</name>
+        <description>This content profile describes the structure of a Group in a Bundle describing Bed Availability</description>
+        <overview></overview>
+    </content>
+    <content id="device-group">
+        <name>Device Availability Group</name>
+        <description>This content profile describes the structure of a Group in a Bundle describing Device Availability</description>
+        <overview></overview>
+    </content>
+    <content id="bed-location">
+        <name>Single Bed Availability Status</name>
+        <description>This content profile describes the structure of a Location Resource providing features of a supporting-device in a Bed Availability Group</description>
+        <overview></overview>
+    </content>
+    <content id="supporting-device">
+        <name>Single Device Availability Status</name>
+        <description>This content profile describes the structure of a Device Resource providing features for a Device in a Device Availability Group</description>
+        <overview></overview>
+    </content>
+        <content id="resource-location">
+        <name>Resource Location</name>
+        <description>This content profile describes the structure of a Location Resource describing the physical location (e.g., building)
+where a bed or device is located</description>
+        <overview></overview>
+    </content>
+</profile>

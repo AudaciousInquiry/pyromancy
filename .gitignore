@@ -1,0 +1,15 @@
+/input/**
+/input-cache/org.hl7.fhir.publisher.jar
+/input-cache/**
+temp
+template
+output
+/build/
+/save/
+/target/
+/bin/
+/fshx/ig-data/input/examples
+/fshx/ig-data/input/feature
+/fshx/ig-data/input/images
+/fshx/ig-data/input/images-source
+/fshx/ig-data/input/pagecontent

@@ -1,5 +1,5 @@
 # Pyromancy
-[!pyromancy.jpg]
+![pyromancy.jpg]
 
 Pyromancy is the tool we used to set a fire under The SANER Project.  It evolved out
 of initial work on the IHE ACDC Profile, and subsequent evolution around how to

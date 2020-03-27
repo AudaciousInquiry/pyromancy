@@ -31,7 +31,7 @@ The project is pretty empty to start with.  The magic happens through
 the spell components in [a single 300 line XML File](https://github.com/AudaciousInquiry/pyromancy/blob/master/fshx/ig-data/input/SANER.xml), and a few XSLT files.
 
 ## To invoke the Magic of Pyromancy
-Chant BUILD.BAT at when prompted by the shell demon. The XML file
+Chant BUILD.BAT when prompted by the shell demon. The XML file
 is transformed to various outputs through the efforts of various
 magical components.  Some of these outputs are then planted,
 and bloom into wondrous imagery.

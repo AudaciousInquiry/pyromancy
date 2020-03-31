@@ -1,5 +1,5 @@
 # Pyromancy
-[!pyromancy.jpg]
+![Pyromancer](pyromancy.jpg)
 
 Pyromancy is the tool we used to set a fire under The SANER Project.  It evolved out
 of initial work on the IHE ACDC Profile, and subsequent evolution around how to
@@ -26,3 +26,7 @@ Prerequisites to use of it are:
 Eventually we will get around to providing some documentation. It's
 not the way we'd prefer to do things, but it might just help others
 set a fire under their own FHIR projects.
+
+The project is pretty empty to start with.  The magic happens through
+the spell components in [a single 300 line XML File](https://github.com/AudaciousInquiry/pyromancy/blob/master/fshx/ig-data/input/SANER.xml), and a few XSLT files.
+
